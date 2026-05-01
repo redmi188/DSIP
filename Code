@@ -1,0 +1,41 @@
+image
+img = uint8(255*rand(100,100));
+
+%1. Neighbourhood Relationship (Mean Filter)
+kernel = ones(3,3); % 3x3 neighourhood
+mean_fitered = uint8(conv2(double(img),kernel/9,'same'));
+
+% 2. Pixel Intensity Differences
+dx = abs (diff(img,1,2)); % Horizontal differences
+dy = abs (diff(img,1,1)); % Vertical differences
+
+% Pad to match original size
+dx = padarray(dx,[0 1],'post');
+dy = padarray(dy,[1 0],'post');
+
+%3. Gray Level Co occurrnce Matrix (GLCM)
+glcm = graycomatrix(img,'Offset',[0 1]); % Horizontal Offset
+stats = graycoprops(glcm); % Extract texture features
+
+% Display Results 
+figure;
+
+subplot(2,3,1);
+imshow(img);
+title('Original Grayscale Image');
+
+subplot(2,3,2);
+imshow(mean_fitered);
+title(' Mean Filtered Neighbourhood');
+
+subplot(2,3,3);
+imshow(dx,[]);
+title('Horizontal Intensisty Differences');
+
+subplot(2,3,4);
+imshow(dy,[]);
+title('Vertical Intensity Differences');
+
+subplot(2,3,5);
+imshow(glcm,[]);
+title('GLCM - Horizontl Offset');
