@@ -1,0 +1,88 @@
+🔷 THEORY (POINTER FORMAT + FULL UNDERSTANDING)
+Digital image transformations modify the spatial arrangement of pixels without changing the actual pixel values.
+
+🔷 1. Image Scaling (Resizing)
+Scaling changes the size of an image.
+It can be:
+Down-sampling (reduction) → making image smaller
+Up-sampling (enlargement) → making image larger
+MATLAB uses interpolation methods internally to estimate new pixel values:
+Nearest neighbor
+Bilinear
+Bicubic (default in many cases)
+👉 Purpose:
+To fit images into different display sizes
+Used in zooming, thumbnails, and multi-resolution processing
+
+🔷 2. Image Rotation
+Rotation changes the orientation of the image by a given angle.
+Each pixel is repositioned based on a rotation matrix.
+Positive angle → counter-clockwise rotation
+👉 Purpose:
+To correct orientation
+Used in object alignment, robotics, and computer vision
+
+🔷 WHY THIS EXPERIMENT IS DONE
+To understand how spatial transformations affect images.
+To learn how scaling changes resolution and detail.
+To understand how rotation affects pixel mapping.
+These operations are fundamental in:
+Computer vision
+Image augmentation (AI/ML)
+Pattern recognition
+Graphics systems
+
+************************Code*************************
+
+img = imread('P5-Image.jpg');      
+% Reads input image from file (RGB image stored as matrix)
+
+% -------------------- SCALING --------------------
+
+img_half = imresize(img,0.5);      
+% Reduces image size to 50%
+% Down-sampling → fewer pixels, reduced resolution
+
+img_double = imresize(img,2);     
+% Increases image size to 200%
+% Up-sampling → more pixels, interpolated values
+
+% -------------------- ROTATION --------------------
+
+img_rot45 = imrotate(img,45);     
+% Rotates image by 45 degrees counter-clockwise
+% New empty areas filled automatically
+
+img_rot90 = imrotate(img,90);     
+% Rotates image by 90 degrees counter-clockwise
+% Standard right-angle rotation
+
+% -------------------- DISPLAY --------------------
+
+figure;                           
+% Opens new figure window for visualization
+
+subplot(2,3,1);
+imshow(img);
+title('Original');
+% Displays original image
+
+subplot(2,3,2);
+imshow(img_half);
+title('Scaled 0.5x');
+% Shows reduced-size image
+
+subplot(2,3,3);
+imshow(img_double);
+title('Scaled 2x');
+% Shows enlarged image
+
+subplot(2,3,4);
+imshow(img_rot45);
+title('Rotated 45°');
+% Shows image rotated by 45 degrees
+
+subplot(2,3,5);
+imshow(img_rot90);
+title('Rotated 90°');
+% Shows image rotated by 90 degrees
