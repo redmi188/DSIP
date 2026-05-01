@@ -1,0 +1,21 @@
+%P4 - Design of LPF using Hamming Window
+
+fs = 8000; % Sampling Frequency
+fc = 1000; % Cutoff Frequency
+
+N = 50; % Filter Order
+
+h = fir1(N,fc/(fs/2),'low',hamming(N+1));
+
+disp ('Filter Coefficients:');
+disp(h); % Display Coefficients
+
+figure; % Plot impulse response
+stem(h);
+title('Impulse Response of FIR Low Pass Filter');
+xlabel('n');
+ylabel('h[n]')
+
+figure;
+freqz(h,1,1024,fs); % Plot frequency response
+title('Frequency Response of FIR Low Pass Filter');
