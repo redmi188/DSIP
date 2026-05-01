@@ -1,0 +1,136 @@
+🔷 THEORY (POINTER FORMAT + FULL UNDERSTANDING)
+
+🔷 1. Frequency Domain Analysis
+Signals and images can be analyzed in:
+Spatial/Time domain → original form
+Frequency domain → representation in terms of frequency components
+Fourier Transform converts a signal/image from spatial domain to frequency domain.
+
+🔷 2. 2D FFT for Images
+Images are 2D signals (rows × columns).
+FFT2 (2D Fast Fourier Transform) is used to convert image into frequency domain.
+Output shows:
+Low frequencies → smooth regions (center after shift)
+High frequencies → edges and noise (outer regions)
+fftshift() moves low frequencies to the center for better visualization.
+👉 Purpose:
+To analyze texture, edges, and frequency content of images
+Used in compression, filtering, and enhancement
+
+🔷 3. Magnitude Spectrum
+FFT output is complex (real + imaginary parts)
+Magnitude is computed using:
+log(1 + |F|)
+Log is used because FFT values have very large range.
+👉 Purpose:
+To visualize frequency strength clearly
+
+🔷 4. EEG Signal Analysis using FFT
+EEG signals represent brain electrical activity over time.
+They are combinations of different frequency waves (alpha, beta, etc.).
+A simulated EEG signal is created using:
+Multiple sine waves (different frequencies)
+Added noise (realistic brain signal behavior)
+
+🔷 5. FFT of EEG Signal
+FFT converts EEG from time domain → frequency domain.
+Power spectrum shows strength of each frequency.
+👉 Purpose:
+To identify dominant brain wave frequencies
+Used in medical diagnosis and brain-computer interfaces
+
+🔷 WHY THIS EXPERIMENT IS DONE
+To understand frequency representation of images and signals.
+To analyze hidden patterns not visible in time/spatial domain.
+To study:
+Image frequency content (edges, textures)
+EEG signal frequency components (brain activity patterns)
+FFT is widely used in:
+Medical signal processing
+Image filtering
+Communication systems
+Audio processing
+
+************************Code**********************
+
+img = imread('P5-Image.jpg');  
+% Reads image from specified path
+
+gray_img = rgb2gray(img);  
+% Converts RGB image to grayscale for FFT processing
+% FFT works on single-channel intensity values
+
+% -------------------- IMAGE FFT --------------------
+
+F = fft2(double(gray_img));  
+% Applies 2D FFT on image
+% Converts spatial domain → frequency domain
+
+Fshift = fftshift(F);  
+% Shifts zero frequency (low frequency) to center
+% Makes spectrum easier to analyze visually
+
+magnitude = log(1 + abs(Fshift));  
+% Computes magnitude spectrum
+% abs() removes imaginary part
+% log() compresses large dynamic range for display
+
+% -------------------- DISPLAY IMAGE RESULTS --------------------
+
+figure;  
+
+subplot(1,2,1);
+imshow(gray_img);
+title('Original Image');  
+% Shows spatial domain image
+
+subplot(1,2,2);
+imshow(magnitude,[]);
+title('Frequency Spectrum');  
+% Shows frequency domain representation
+
+% -------------------- EEG SIGNAL ANALYSIS --------------------
+
+Fs = 256;  
+% Sampling frequency (EEG standard range)
+
+t = 0:1/Fs:1-1/Fs;  
+% Time vector for 1 second duration
+
+signal = sin(2*pi*10*t) + 0.5*sin(2*pi*20*t) + 0.2*randn(size(t));  
+% Simulated EEG signal:
+% 10 Hz component → alpha wave
+% 20 Hz component → beta wave
+% randn → adds noise (realistic brain signal behavior)
+
+% -------------------- FFT OF EEG --------------------
+
+N = length(signal);  
+% Number of samples
+
+Y = fft(signal);  
+% Converts time domain signal → frequency domain
+
+f = (0:N-1)*(Fs/N);  
+% Frequency axis creation
+
+power = abs(Y).^2/N;  
+% Power spectrum → shows strength of each frequency
+
+% -------------------- DISPLAY EEG RESULTS --------------------
+
+figure;  
+
+subplot(2,1,1);
+plot(t,signal);
+title('EEG Like Signal');
+xlabel('Time (s)');
+% Shows time domain EEG signal
+
+subplot(2,1,2);
+plot(f(1:N/2),power(1:N/2));
+title('Frequency Spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Power');
+% Shows frequency domain representation (half spectrum)
+
