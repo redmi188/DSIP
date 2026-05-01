@@ -1,0 +1,28 @@
+% P5 - Simulation and Display of an Negative Image 
+
+img = imread('P5-Image.jpg');
+
+%Convert to Grayscale
+gray_img = rgb2gray(img)
+% Create Negative Image
+neg_img = imcomplement(gray_img);
+%Convert to binary img using threshold
+bw_img = imbinarize(gray_img);
+
+%Display Results
+figure;
+subplot(2,2,1);
+imshow(img);
+title('Original Image');
+
+subplot(2,2,2);
+imshow(gray_img);
+title('Grayscale Image');
+
+subplot(2,2,3);
+imshow(neg_img);
+title('Negative Image');
+
+subplot(2,2,4);
+imshow(bw_img);
+title('Binary Image')
