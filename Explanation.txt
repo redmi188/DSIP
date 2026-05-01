@@ -1,0 +1,124 @@
+🔷 THEORY (POINTER FORMAT + FULL UNDERSTANDING)
+A digital image can be treated as a 2D function of pixel intensities.
+Image processing often involves analyzing:
+Neighborhood relationships
+Pixel intensity variations
+Texture information
+
+🔷 1. Neighborhood Relationship (Mean Filtering)
+Each pixel is related to its surrounding pixels (neighborhood).
+A 3×3 mean filter is used to smooth the image.
+It replaces each pixel with the average of its neighbors.
+This reduces noise and small intensity variations.
+👉 Purpose:
+To remove noise
+To smooth the image
+To understand local pixel relationships
+
+🔷 2. Pixel Intensity Differences
+Image gradients are computed in horizontal and vertical directions.
+This is done using differences between adjacent pixels.
+Horizontal difference → change along columns
+Vertical difference → change along rows
+👉 Purpose:
+To detect edges
+To measure intensity changes
+To understand image structure
+
+🔷 3. Gray Level Co-occurrence Matrix (GLCM)
+GLCM is a texture analysis method.
+It studies how often pairs of pixel values occur together.
+Offset defines direction (e.g., horizontal neighbors).
+From GLCM we extract:
+Contrast
+Correlation
+Energy
+Homogeneity
+👉 Purpose:
+To analyze texture patterns
+To classify images based on structure
+Used in medical and pattern recognition applications
+
+🔷 WHY THIS EXPERIMENT IS DONE
+To understand how pixel neighborhoods affect image processing.
+To study how intensity changes help detect edges and structures.
+To learn texture analysis using GLCM.
+These are fundamental techniques used in:
+Computer vision
+Medical imaging
+Object detection
+Pattern recognition
+
+***************Code**************
+
+img = uint8(255*rand(100,100));  
+% Creates a random 100x100 grayscale image
+% Values scaled to 0–255 and converted to unsigned 8-bit format
+
+% -------------------- 1. NEIGHBORHOOD PROCESSING --------------------
+
+kernel = ones(3,3);              
+% Creates a 3x3 matrix of ones (mean filter kernel)
+
+mean_fitered = uint8(conv2(double(img),kernel/9,'same'));
+% Step 1: Convert image to double for mathematical operations
+% Step 2: Apply convolution with kernel/9 (average filter)
+% Step 3: 'same' ensures output size is same as input
+% Step 4: Convert result back to uint8 format
+
+% -------------------- 2. INTENSITY DIFFERENCES --------------------
+
+dx = abs(diff(img,1,2));         
+% Computes horizontal intensity differences
+% diff(...,2) → difference along columns (left-right change)
+
+dy = abs(diff(img,1,1));         
+% Computes vertical intensity differences
+% diff(...,1) → difference along rows (top-bottom change)
+
+% Pad results to match original image size
+
+dx = padarray(dx,[0 1],'post');   
+% Adds one column at the end to match original width
+
+dy = padarray(dy,[1 0],'post');   
+% Adds one row at the bottom to match original height
+
+% -------------------- 3. GLCM TEXTURE ANALYSIS --------------------
+
+glcm = graycomatrix(img,'Offset',[0 1]);  
+% Computes Gray Level Co-occurrence Matrix
+% Offset [0 1] means horizontal neighbor relationship
+
+stats = graycoprops(glcm);       
+% Extracts texture properties like contrast, energy, homogeneity
+
+% -------------------- DISPLAY RESULTS --------------------
+
+figure;                           
+% Opens new figure window
+
+subplot(2,3,1);
+imshow(img);
+title('Original Grayscale Image');
+% Displays randomly generated grayscale image
+
+subplot(2,3,2);
+imshow(mean_fitered);
+title('Mean Filtered Neighborhood');
+% Shows smoothed image after averaging neighbors
+
+subplot(2,3,3);
+imshow(dx,[]);
+title('Horizontal Intensity Differences');
+% Shows edge-like changes in horizontal direction
+
+subplot(2,3,4);
+imshow(dy,[]);
+title('Vertical Intensity Differences');
+% Shows edge-like changes in vertical direction
+
+subplot(2,3,5);
+imshow(glcm,[]);
+title('GLCM - Horizontal Offset');
+% Displays texture relationship matrix
