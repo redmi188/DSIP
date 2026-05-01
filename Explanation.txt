@@ -1,0 +1,82 @@
+Objective:
+To design a Low Pass FIR filter using the window method (Hamming window) and analyze its impulse and frequency response.
+
+1) What is a Low Pass Filter (LPF)?
+It allows frequency components from 0 Hz up to a cutoff frequency (fc) and suppresses frequencies above fc.
+
+2) Why FIR filter?
+FIR (Finite Impulse Response) filters:
+- Have finite length (N+1 samples)
+- Are always stable (no feedback)
+- Can achieve linear phase (important for no signal distortion)
+
+3) Problem with Ideal Filter:
+The ideal LPF has an infinite impulse response (sinc function), which cannot be implemented practically.
+
+4) Solution: Window Method
+We truncate the infinite impulse response to finite length.
+But direct truncation (rectangular window) causes ripples in frequency response (Gibbs phenomenon).
+
+5) Hamming Window Concept: Instead of cutting abruptly, we smoothly taper the ends.
+Formula: w(n) = 0.54 - 0.46*cos(2*pi*n/N)
+
+Effect:
+- Reduces ripples in stopband
+- Gives smoother frequency response
+- Slightly increases transition width (trade-off)
+
+Final filter:  h(n) = h_ideal(n) × w(n)
+
+6) Normalized Frequency: Digital systems use normalized frequency (0 to 1), where 1 corresponds to Nyquist frequency (fs/2).
+So:
+normalized fc = fc / (fs/2)
+
+% -------------------- CODE WITH MEANINGFUL COMMENTS --------------------
+
+fs = 8000;              
+% Sampling frequency → defines the digital system scale
+% All frequency calculations depend on this
+
+fc = 1000;              
+% Cutoff frequency → boundary between passband and stopband
+
+N = 50;                 
+% Filter order → controls sharpness of transition
+% Higher N → closer to ideal filter but more computation
+
+h = fir1(N, fc/(fs/2), 'low', hamming(N+1));
+% fir1 internally:
+% 1. Generates ideal sinc-based LPF
+% 2. Multiplies it with Hamming window
+%
+% fc/(fs/2) converts cutoff into normalized form (0 to 1)
+%
+% hamming(N+1):
+% Window length must match number of coefficients (N+1)
+% Ensures smooth tapering at edges
+
+disp('Filter Coefficients:');   
+disp(h);                        
+% h contains impulse response values of the filter
+% These coefficients define the filter completely
+
+figure;                         
+stem(h);                        
+% Impulse response:
+% Shows how filter reacts to a delta input
+% Symmetry in h → ensures linear phase behavior
+
+title('Impulse Response of FIR Low Pass Filter');  
+xlabel('n');                    
+ylabel('h[n]');                 
+
+figure;                         
+freqz(h,1,1024,fs);             
+% freqz computes frequency response using FFT
+%
+% 1024 → higher value = smoother curve
+% h → numerator (FIR has only numerator)
+% 1 → denominator (no feedback)
+% fs → converts normalized freq to Hz
+
+title('Frequency Response of FIR Low Pass Filter')
