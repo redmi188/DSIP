@@ -1,0 +1,21 @@
+🔷 THEORY (POINTER FORMAT)
+A digital image is represented as a 2D matrix of pixel values.
+Color images contain three channels: Red, Green, and Blue (RGB).
+Grayscale image contains only intensity information, not color.
+Grayscale conversion reduces RGB image into a single intensity channel using weighted contribution of R, G, and B components.
+Negative image is obtained by reversing pixel intensity values.
+Formula: Negative = 255 − pixel value
+It enhances contrast by swapping dark and bright regions.
+Binary image contains only two values:
+0 (black) and 1 (white)
+Binary conversion is done using thresholding.
+Pixels above threshold become white
+Pixels below threshold become black
+MATLAB function imbinarize() automatically selects threshold using Otsu’s method.
+subplot() is used to display multiple images in one figure window.
+
+🔷 WHY THIS IS DONE (NEED)
+Grayscale conversion simplifies image processing by reducing data size.
+Negative transformation is used to enhance hidden or low-contrast details.
+Binary images are used for segmentation, object detection, and feature extraction.
+These transformations are fundamental steps in digital image processing pipelines.
