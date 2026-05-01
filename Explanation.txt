@@ -19,3 +19,40 @@ Grayscale conversion simplifies image processing by reducing data size.
 Negative transformation is used to enhance hidden or low-contrast details.
 Binary images are used for segmentation, object detection, and feature extraction.
 These transformations are fundamental steps in digital image processing pipelines.
+
+***************Code***************
+
+img = imread('P5-Image.jpg');      
+% Reads image file and stores it as matrix (RGB image)
+
+gray_img = rgb2gray(img);          
+% Converts RGB image into grayscale (removes color information)
+
+neg_img = imcomplement(gray_img);  
+% Creates negative image by inverting intensity values (255 - pixel)
+
+bw_img = imbinarize(gray_img);     
+% Converts grayscale image into binary image using thresholding
+
+figure;                            
+% Opens new figure window for displaying images
+
+subplot(2,2,1);                    
+imshow(img);                       
+title('Original Image');           
+% Displays original RGB image
+
+subplot(2,2,2);                    
+imshow(gray_img);                  
+title('Grayscale Image');          
+% Displays grayscale version of image
+
+subplot(2,2,3);                    
+imshow(neg_img);                   
+title('Negative Image');           
+% Displays inverted intensity image
+
+subplot(2,2,4);                    
+imshow(bw_img);                    
+title('Binary Image');             
+% Displays black & white segmented image
