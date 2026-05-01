@@ -1,0 +1,37 @@
+%P8 - Analyzing img and EEG signals , Frequency domain analyais FFT in matlab
+
+img = imread('C:\Users\rampa\Downloads\P5-Image.jpg');
+
+gray_img = rgb2gray(img);
+
+%Apply FFT
+F = fft2(double(gray_img));
+Fshift = fftshift(F); % Shift zero frequency to center
+
+magnitude = log(1+abs(Fshift)) % Magnitude Spectrum
+
+%Display results
+figure;
+
+subplot(1,2,1);imshow(gray_img);title(('Original Image'));
+subplot(1,2,2);imshow(magnitude,[]);title(('Frequency Spectrum'));
+
+%EEG Signal Frequency Analysis with FFT
+% Simulate an EEG like signal (mixture of sine waves +noise)
+Fs = 256;
+t = 0:1/Fs:1-1/Fs; % 1 second duration
+
+signal = sin(2*pi*10*t) + 0.5*sin(2*pi*20*t) + 0.2*randn(size(t));
+
+% Apply FFT
+N = length(signal);
+Y = fft(signal);
+f = (0:N-1)*(Fs/N); %Frequency axis
+power = abs(Y).^2/N; % Power Spectrum
+
+% Display Results
+figure;
+
+subplot(2,1,1);plot(t,signal);title(('EEG Like signal'));xlabel('Time(s)');
+subplot(2,1,2);plot(f(1:N/2),power(1:N/2));
+title('Frequency Spectrum');xlabel('Frequency (Hz)');ylabel('Power');
